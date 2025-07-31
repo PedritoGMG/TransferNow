@@ -1,0 +1,42 @@
+<div class="alert alert-primary m-3" role="alert">
+  Share this page with your friends so they can send you files! Make sure you have <a href="http://localhost:8080/checkRequests" target="_blank" class="alert-link">the tab that manages requests</a> open so you can receive them correctly.
+</div>
+<div class="max-container card mt-5">
+  <h5 class="card-header">Send a File</h5>
+  <div class="card-body">
+    <div class="file-selector">
+      <div class="mb-3">
+        <label for="formFile" class="form-label">Select file to upload</label>
+        <input
+          class="form-control"
+          type="file"
+          id="formFile"
+          (change)="onFileSelected($event)"
+          #fileInput
+        />
+      </div>
+      @if (file) {
+      <div @fadeInOut>
+        <h4>File Information</h4>
+        <div class="d-flex flex-column gap-2">
+          <span><strong>Name:</strong> {{ file.name }}</span>
+          <span><strong>Size:</strong> {{ file.size | fileSize }}</span>
+          <span><strong>Type:</strong> {{ file.type || 'Unknown' }}</span>
+        </div>
+      </div>
+      }
+    </div>
+    <div class="mt-3">
+      <button
+        type="button"
+        class="btn btn-primary btn-lg w-100"
+        [disabled]="!file"
+        (click)="sendRequest()"
+      >
+        <i class="bi bi-upload"></i>
+        Send File Request
+        <i class="bi bi-upload"></i>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,169 @@
+<div class="container">
+  <header class="d-flex justify-content-center py-3">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a href="#" class="nav-link active" aria-current="page">Your Files</a>
+      </li>
+      <li class="nav-item"><a href="checkRequests" target="_blank" class="nav-link">Check Requests</a></li>
+      <li class="nav-item"><a (click)="goToPublicEndpoint('/requestUpload')" target="_blank" class="nav-link clickable">Request Upload</a></li>
+    </ul>
+  </header>
+</div>
+<div class="mx-md-5 mx-0 p-3">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb m-2">
+      @for (item of actualDir; track $index; let idx = $index, last = $last) {
+      @if (last) {
+      <li class="breadcrumb-item active" aria-current="page">{{ item[1] }}</li>
+      }@else {
+      <li class="breadcrumb-item" aria-current="page">
+        <a
+          class="link-offset-2 link-underline link-underline-opacity-0"
+          href="#"
+          (click)="goTo(item[0])"
+          >{{ item[1] }}</a
+        >
+      </li>
+      } }
+    </ol>
+  </nav>
+  <div class="d-flex align-items-center gap-3 p-2 border-bottom bg-light">
+    <!-- Search -->
+    <div class="d-flex align-items-center flex-grow-1 position-relative">
+      <input
+        type="text"
+        class="form-control pe-5"
+        placeholder="Search..."
+        [(ngModel)]="searchText"
+      />
+      <i
+        class="fas fa-search position-absolute end-0 top-50 translate-middle-y me-3 text-muted"
+      ></i>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex gap-2">
+      <button
+        type="button"
+        class="btn btn-success"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Create Folder"
+        (click)="createFolder()"
+      >
+        <i class="bi bi-folder-plus"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-warning"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Upload File"
+        (click)="selectFileSource()"
+      >
+        <i class="bi bi-upload"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="tooltip"
+        data-bs-placement="top"
+        title="Download Folder"
+        (click)="download(actualFolderIndex, getCurrentDirName())"
+      >
+        <i class="bi bi-download"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-success"
+        title="Share"
+        (click)="share('/filesystem/download/' + actualFolderIndex)"
+      >
+        <i class="bi bi-share"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="border rounded border-primary mx-md-5 mx-0 p-3">
+  <div class="row py-2 border-bottom fw-bold">
+    <div class="col clickable" (click)="sortBy('name')">
+      Name @if (sortColumn === "name") {<span>{{
+        sortDirection === "asc" ? "↑" : "↓"
+      }}</span
+      >}
+    </div>
+    <div class="col-3 text-nowrap clickable" (click)="sortBy('createdAt')">
+      Created At @if (sortColumn === "createdAt") {<span>{{
+        sortDirection === "asc" ? "↑" : "↓"
+      }}</span
+      >}
+    </div>
+    <div class="col-2 text-nowrap clickable" (click)="sortBy('size')">
+      Size @if (sortColumn === "size") {<span>{{
+        sortDirection === "asc" ? "↑" : "↓"
+      }}</span
+      >}
+    </div>
+    <div class="col-2 text-nowrap">Actions</div>
+  </div>
+
+  @for (item of folderContents | sort:sortColumn:sortDirection | orderByType |
+  search:searchText ; track $index) {
+  <div class="row align-items-center py-2 border-bottom" [@listAnimation]>
+    <div class="col d-flex align-items-center gap-2">
+      <i [class]="'fs-3 bi ' + iconService.getIcon(item)"></i>
+      @if (isFolder(item)) {
+      <a
+        class="d-block w-100 link-offset-2 link-underline link-underline-opacity-0"
+        href="#"
+        (click)="goTo(item.id)"
+      >
+        {{ item.name }}
+      </a>
+      } @else {
+      <p class="m-0">{{ item.name }}</p>
+      }
+    </div>
+
+    <div class="col-3 text-nowrap">
+      {{ item.createdAt | date : "short" }}
+    </div>
+
+    <div class="col-2 text-nowrap">
+      @if (isFolder(item)) {
+      <p class="m-0">-</p>
+      <!-- <p class="m-0">{{ getSize(item.id) | async | fileSize }}</p> -->
+      } @else {
+      <p class="m-0">{{ item.size | fileSize }}</p>
+      }
+    </div>
+
+    <div class="col-2 d-flex gap-2 flex-md-row flex-column">
+      <button
+        type="button"
+        class="btn btn-primary"
+        title="Download"
+        (click)="download(item.id, item.name)"
+      >
+        <i class="bi bi-download"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-danger"
+        title="Delete"
+        (click)="deleteItem(item)"
+      >
+        <i class="bi bi-trash"></i>
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        title="Share"
+        (click)="share('/filesystem/download/' + item.id)"
+      >
+        <i class="bi bi-share"></i>
+      </button>
+    </div>
+  </div>
+  }
+</div>

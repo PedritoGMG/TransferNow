@@ -1,0 +1,34 @@
+<div class="max-container card mt-5">
+  <h5 class="card-header">Pending File Requests</h5>
+  <div class="card-body">
+    @if (pendingRequests.length === 0) {
+    <div class="empty-state text-center py-5 text-muted">
+      <i class="bi bi-inbox fs-1 mb-3"></i>
+      <p class="mb-0">No pending requests</p>
+    </div>
+    }
+
+    <div class="d-flex flex-column gap-4">
+      @for (request of pendingRequests; track $index) {
+      <div class="card shadow-sm border rounded border-primary" [@listAnimation]>
+        <div class="card-body">
+          <div class="d-flex flex-column">
+            <h4 class="fw-bold mb-2 text-primary">{{ request.fileName }}</h4>
+            <p class="mb-1"><i class="bi bi-person"></i> <strong> From:</strong> {{ request.senderName }}</p>
+            <p class="mb-1"><i class="bi bi-file-earmark"></i> <strong> Type:</strong> {{ request.fileType || "Unknown" }}</p>
+            <p class="mb-0"><i class="bi bi-hdd"></i> <strong> Size:</strong> {{ request.fileSize | fileSize }}</p>
+          </div>
+        </div>
+        <div class="card-footer bg-light d-flex flex-row gap-3">
+          <button type="button" class="btn btn-success flex-fill d-flex align-items-center justify-content-center gap-2" (click)="approveRequest(request)">
+            <i class="bi bi-check-lg"></i> Approve
+          </button>
+          <button type="button" class="btn btn-outline-danger flex-fill d-flex align-items-center justify-content-center gap-2" (click)="rejectRequest(request)">
+            <i class="bi bi-x-circle"></i> Deny
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+</div>
