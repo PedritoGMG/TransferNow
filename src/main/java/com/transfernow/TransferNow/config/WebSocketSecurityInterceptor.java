@@ -66,7 +66,8 @@ public class WebSocketSecurityInterceptor implements ChannelInterceptor {
     private boolean isLocalhost(String ip) {
         IpAddressMatcher localhostMatcher = new IpAddressMatcher("127.0.0.1");
         IpAddressMatcher ipv6Matcher = new IpAddressMatcher("::1");
-        boolean isLocal = ip != null && (localhostMatcher.matches(ip) || ipv6Matcher.matches(ip));
+        IpAddressMatcher dockerNet = new IpAddressMatcher("172.16.0.0/12");
+        boolean isLocal = ip != null && (localhostMatcher.matches(ip) || ipv6Matcher.matches(ip) || dockerNet.matches(ip));
         return isLocal;
     }
 

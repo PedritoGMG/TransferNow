@@ -15,7 +15,7 @@ public class HostController {
         try {
             URL url = new URL("https://checkip.amazonaws.com/");
             try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
-                return "http://" + br.readLine() + ":" + 8080;
+                return "http://" + br.readLine() + ":" + 4200;
             }
         } catch (Exception e) {
             e.printStackTrace();

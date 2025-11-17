@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: src/Dockerfile
+    container_name: spring-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - backend_data:/data
+    environment:
+      DB_USER: admin
+      DB_PASSWORD: admin
+      HARDLINKS_DIR: /data/hardlinks
+      DOWNLOADS_DIR: /data/downloads
+      UPNP_ENABLED: true
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: angular-frontend
+    ports:
+      - "4200:4200"
+    # volumes:
+    #  - ./frontend:/app
+    depends_on:
+      - backend
+
+volumes:
+  backend_data:

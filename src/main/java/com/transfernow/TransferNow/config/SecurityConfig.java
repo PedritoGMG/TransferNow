@@ -46,9 +46,11 @@ public class SecurityConfig {
     private AuthorizationDecision isLocalhost(Supplier<Authentication> authentication, RequestAuthorizationContext context) {
         IpAddressMatcher localhostMatcher = new IpAddressMatcher("127.0.0.1");
         IpAddressMatcher ipv6Matcher = new IpAddressMatcher("::1");
+        IpAddressMatcher dockerNet = new IpAddressMatcher("172.16.0.0/12");
 
         boolean isLocal = localhostMatcher.matches(context.getRequest()) ||
-                ipv6Matcher.matches(context.getRequest());
+                ipv6Matcher.matches(context.getRequest()) ||
+                dockerNet.matches(context.getRequest());
 
         return new AuthorizationDecision(isLocal);
     }
