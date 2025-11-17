@@ -18,3 +18,21 @@
     <img src="https://github.com/user-attachments/assets/c244419f-b206-4e86-b14d-52d526f501a7" width="400">
   </div>
 </div>
+
+## 🐳 Run the Project with Docker
+
+You can run the backend and frontend independently with Docker:
+
+```bash
+docker-compose up --build
+```
+
+## 🔓 Opening Ports (Windows / Linux)
+
+A Python script is included to open your ports so other users can access your app. Use the executable version for simplicity:
+
+```bash
+port_upnp.exe
+```
+The script will detect your local IP and open ports 8080 (backend) and 4200 (frontend).
+Keep it running while you want the ports open. Press Ctrl+C to close the ports automatically.
